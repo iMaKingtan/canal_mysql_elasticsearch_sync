@@ -13,5 +13,9 @@ public interface TransactionalService {
     /**
      * 开启事务的读取mysql并插入到Elasticsearch中（读锁）
      */
-    void batchInsertElasticsearch(SyncByTableRequest request, String primaryKey, long from, long to, IndexTypeModel indexTypeModel);
+    void batchInsertElasticsearch(SyncByTableRequest request,
+                                  String primaryKey,
+                                  long from,
+                                  long to,
+                                  IndexTypeModel indexTypeModel);
 }

@@ -1,6 +1,6 @@
 package com.star.sync.elasticsearch.model.request;
 
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 
 /**
  * @author <a href="mailto:wangchao.star@gmail.com">wangchao</a>

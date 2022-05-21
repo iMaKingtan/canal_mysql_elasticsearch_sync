@@ -12,7 +12,6 @@ import com.star.sync.elasticsearch.service.MappingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
-
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +38,6 @@ public abstract class AbstractCanalListener<EVENT extends AbstractCanalEvent> im
             return;
         }
         String index = indexTypeModel.getIndex();
-        String type = indexTypeModel.getType();
         RowChange change;
         try {
             change = RowChange.parseFrom(entry.getStoreValue());
@@ -47,7 +45,7 @@ public abstract class AbstractCanalListener<EVENT extends AbstractCanalEvent> im
             logger.error("canalEntry_parser_error,根据CanalEntry获取RowChange失败！", e);
             return;
         }
-        change.getRowDatasList().forEach(rowData -> doSync(database, table, index, type, rowData));
+        change.getRowDatasList().forEach(rowData -> doSync(database, table, index, rowData));
     }
 
     Map<String, Object> parseColumnsToMap(List<Column> columns) {
@@ -61,5 +59,5 @@ public abstract class AbstractCanalListener<EVENT extends AbstractCanalEvent> im
         return jsonMap;
     }
 
-    protected abstract void doSync(String database, String table, String index, String type, RowData rowData);
+    protected abstract void doSync(String database, String table, String index, RowData rowData);
 }

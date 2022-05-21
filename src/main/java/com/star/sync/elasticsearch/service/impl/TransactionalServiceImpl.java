@@ -39,7 +39,7 @@ public class TransactionalServiceImpl implements TransactionalService {
         }
         dataList = convertDateType(dataList);
         Map<String, Map<String, Object>> dataMap = dataList.parallelStream().collect(Collectors.toMap(strObjMap -> String.valueOf(strObjMap.get(primaryKey)), map -> map));
-        elasticsearchService.batchInsertById(indexTypeModel.getIndex(), indexTypeModel.getType(), dataMap);
+        elasticsearchService.batchInsertById(indexTypeModel.getIndex(), dataMap);
     }
 
     private List<Map<String, Object>> convertDateType(List<Map<String, Object>> source) {

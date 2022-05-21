@@ -30,16 +30,19 @@ public class DeleteCanalListener extends AbstractCanalListener<DeleteAbstractCan
     private ElasticsearchService elasticsearchService;
 
     @Override
-    protected void doSync(String database, String table, String index, String type, RowData rowData) {
+    protected void doSync(String database, String table, String index, RowData rowData) {
         List<Column> columns = rowData.getBeforeColumnsList();
-        String primaryKey = Optional.ofNullable(mappingService.getTablePrimaryKeyMap().get(database + "." + table)).orElse("id");
+        String primaryKey = Optional.ofNullable(mappingService.
+                                                getTablePrimaryKeyMap().
+                                                get(database + "." + table)).
+                                                orElse("id");
         Column idColumn = columns.stream().filter(column -> column.getIsKey() && primaryKey.equals(column.getName())).findFirst().orElse(null);
         if (idColumn == null || StringUtils.isBlank(idColumn.getValue())) {
             logger.warn("insert_column_find_null_warn insert从column中找不到主键,database=" + database + ",table=" + table);
             return;
         }
         logger.debug("insert_column_id_info insert主键id,database=" + database + ",table=" + table + ",id=" + idColumn.getValue());
-        elasticsearchService.deleteById(index, type, idColumn.getValue());
+        elasticsearchService.deleteById(index, idColumn.getValue());
         logger.debug("insert_es_info 同步es插入操作成功！database=" + database + ",table=" + table + ",id=" + idColumn.getValue());
     }
 }

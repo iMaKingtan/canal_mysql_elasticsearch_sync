@@ -31,7 +31,7 @@ public class UpdateCanalListener extends AbstractCanalListener<UpdateAbstractCan
     private ElasticsearchService elasticsearchService;
 
     @Override
-    protected void doSync(String database, String table, String index, String type, RowData rowData) {
+    protected void doSync(String database, String table, String index, RowData rowData) {
         List<Column> columns = rowData.getAfterColumnsList();
         String primaryKey = Optional.ofNullable(mappingService.getTablePrimaryKeyMap().get(database + "." + table)).orElse("id");
         Column idColumn = columns.stream().filter(column -> column.getIsKey() && primaryKey.equals(column.getName())).findFirst().orElse(null);
@@ -41,7 +41,7 @@ public class UpdateCanalListener extends AbstractCanalListener<UpdateAbstractCan
         }
         logger.debug("update_column_id_info update主键id,database=" + database + ",table=" + table + ",id=" + idColumn.getValue());
         Map<String, Object> dataMap = parseColumnsToMap(columns);
-        elasticsearchService.update(index, type, idColumn.getValue(), dataMap);
+        elasticsearchService.update(index, idColumn.getValue(), dataMap);
         logger.debug("update_es_info 同步es插入操作成功！database=" + database + ",table=" + table + ",data=" + dataMap);
     }
 }
